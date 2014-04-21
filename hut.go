@@ -10,7 +10,7 @@ import (
 )
 
 type Multiparts struct {
-	buffer *bytes.Buffer
+	buffer bytes.Buffer
 	writer *multipart.Writer
 }
 
@@ -44,7 +44,7 @@ func AddMultiparts(req *http.Request, parts ...Part) error {
 		return err
 	}
 
-	req.Body = ioutil.NopCloser(multiparts.buffer)
+	req.Body = ioutil.NopCloser(&multiparts.buffer)
 	req.ContentLength = int64(multiparts.buffer.Len())
 	req.Header.Add("Content-Type", multiparts.writer.FormDataContentType())
 
@@ -83,7 +83,7 @@ func (part FormPart) AddPart(parts *Multiparts) error {
 
 func (parts *Multiparts) getMultipartWriter() *multipart.Writer {
 	if parts.writer == nil {
-		parts.writer = multipart.NewWriter(parts.buffer)
+		parts.writer = multipart.NewWriter(&parts.buffer)
 	}
 	return parts.writer
 }
