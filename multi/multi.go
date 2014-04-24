@@ -1,4 +1,4 @@
-package hut
+package multi
 
 import (
 	"bytes"
@@ -6,7 +6,6 @@ import (
 	"io/ioutil"
 	"mime/multipart"
 	"net/http"
-	"net/http/httputil"
 )
 
 type Multiparts struct {
@@ -86,14 +85,4 @@ func (parts *Multiparts) getMultipartWriter() *multipart.Writer {
 		parts.writer = multipart.NewWriter(&parts.buffer)
 	}
 	return parts.writer
-}
-
-func DebugResponse(resp *http.Response, includeBody bool) string {
-	dump, _ := httputil.DumpResponse(resp, includeBody)
-	return string(dump)
-}
-
-func DebugRequest(req *http.Request, includeBody bool) string {
-	dump, _ := httputil.DumpRequest(req, includeBody)
-	return string(dump)
 }
